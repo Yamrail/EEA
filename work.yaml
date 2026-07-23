@@ -1,0 +1,16 @@
+version: 1
+project: EEA
+target: https://github.com/Yamrail
+visibility: public
+tag: v1.0.0-draft
+commit_message: Initial public draft of EEA
+rules:
+  - Use only files in this package.
+  - Do not rewrite content.
+  - Stop on permission error, merge conflict, or ambiguous repository target.
+steps:
+  - verify repository target
+  - create or select repository
+  - copy package contents
+  - commit and push
+  - create tag and release
