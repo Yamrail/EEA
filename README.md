@@ -15,3 +15,5 @@ EEA（Evaluation Environment Audit）は、AI評価環境を設計し、レビ�
 ```
 
 本文は `EEA_v1.0_Draft.md` を参照してください。
+
+安全憲法 Version 0.1 Draft は [`IRREVERSIBLE_HUMAN_LIFE_LOSS_EXCLUSION_RULE.md`](constitutional/IRREVERSIBLE_HUMAN_LIFE_LOSS_EXCLUSION_RULE.md) を参照してください。
