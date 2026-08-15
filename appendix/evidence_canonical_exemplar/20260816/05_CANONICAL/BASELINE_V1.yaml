@@ -1,0 +1,17 @@
+schema_version: YAMRAIL_CANONICAL_BASELINE_V1
+baseline_id: BL-SYN-V1
+status: CANONICAL_CURRENT
+established_for_example: true
+subject: 下層路盤施工前 路床施工基面
+stations:
+- station: STA.0+020
+  formation_elevation_m: 101.25
+- station: STA.0+040
+  formation_elevation_m: 101.12
+- station: STA.0+060
+  formation_elevation_m: 100.99
+acceptance:
+  formation_level_tolerance_mm: ±20
+  soft_spot: 施工前に支持状態を確認する
+superseded: false
+note: V2候補が存在してもHuman Gate承認までは本V1が現行正本。

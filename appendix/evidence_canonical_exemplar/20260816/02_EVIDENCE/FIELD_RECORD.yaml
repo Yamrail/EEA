@@ -1,0 +1,31 @@
+schema_version: YAMRAIL_FIELD_EVIDENCE_V1
+evidence_id: EV-SYN-001
+evidence_type: SYNTHETIC_FIELD_RECORD
+observed_at: '2026-08-16T02:50:00+09:00'
+source_actor: synthetic survey crew
+project_data_status: SYNTHETIC_ONLY
+reference_baseline: ../05_CANONICAL/BASELINE_V1.yaml
+observations:
+- station: STA.0+020
+  target_elevation_m: 101.25
+  observed_elevation_m: 101.258
+  difference_mm: 8
+  surface_condition: firm
+  observation_status: OBS
+- station: STA.0+040
+  target_elevation_m: 101.12
+  observed_elevation_m: 101.085
+  difference_mm: -35
+  surface_condition: localized soft spot observed
+  observation_status: OBS
+- station: STA.0+060
+  target_elevation_m: 100.99
+  observed_elevation_m: 100.984
+  difference_mm: -6
+  surface_condition: firm
+  observation_status: OBS
+unknowns:
+- STA.0+040付近の軟弱箇所の平面範囲
+- 軟弱箇所の深さ
+judgment_included: false
+note: 本ファイルは原証憑役のみを持ち、合否・正本変更判断を含めない。

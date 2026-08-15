@@ -1,0 +1,21 @@
+schema_version: YAMRAIL_PUBLIC_EXEMPLAR_WORK_ORDER_V1
+work_order_id: YR-EX-PUBLIC-CANONICAL-001
+status: ISSUED_SYNTHETIC
+subject: 仮想道路改良工事における路床施工基面確認
+site: SYNTHETIC_SITE_A
+scope:
+- 下層路盤施工前の路床施工基面高さを照査する
+- 局所的な軟弱箇所の有無を記録する
+- 不適合又は未確認事項はHOLDとして残す
+- 是正案は正本候補として分離し、人間承認なしに正本化しない
+specified_requirements:
+  formation_level_tolerance_mm: ±20
+  soft_spot_condition: 連続性・範囲が確認できない場合はHOLD
+  canonical_change_authority: Human Gate only
+  technical_value_basis: synthetic demonstration only; not a real project specification
+    or design criterion
+prohibitions:
+- 実案件情報の混入
+- AIによる正本切替
+- 未解消HOLDのPASS化
+- 公開判断の自動化

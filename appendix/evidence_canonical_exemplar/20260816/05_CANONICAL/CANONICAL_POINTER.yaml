@@ -1,0 +1,10 @@
+schema_version: YAMRAIL_CANONICAL_POINTER_V1
+pointer_id: PTR-SYN-001
+current_canonical_baseline: BASELINE_V1.yaml
+current_canonical_baseline_id: BL-SYN-V1
+candidate_baseline: BASELINE_V2.yaml
+candidate_baseline_id: BL-SYN-V2
+candidate_status: HOLD_PENDING_HUMAN_GATE
+resolution_rule: 現行正本は本pointerのみから解決する
+legacy_preservation_rule: BASELINE_V1.yamlを削除・上書きしない
+ai_may_change_pointer: false

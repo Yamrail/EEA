@@ -1,0 +1,25 @@
+schema_version: YAMRAIL_HUMAN_GATE_V1
+gate_id: HG-SYN-PUBLIC-001
+human_authority: DESIGNATED_HUMAN_AUTHORITY
+canonical_change:
+  state: HOLD
+  requested_candidate: 05_CANONICAL/BASELINE_V2.yaml
+  decision_recorded_by_human: false
+  allowed_states:
+  - APPROVE
+  - REJECT
+  - HOLD
+public_release:
+  state: APPROVE
+  decision_recorded_by_human: true
+  approved_at: '2026-08-16T03:35:00+09:00'
+  approval_scope: public_release_only
+  decision_basis: explicit human instruction to proceed with publication
+  allowed_states:
+  - APPROVE
+  - REJECT
+  - HOLD
+ai_authority:
+  canonical_change: false
+  public_release: false
+next_action: CODEX_PUBLICATION_WORK_ORDER_ALLOWED

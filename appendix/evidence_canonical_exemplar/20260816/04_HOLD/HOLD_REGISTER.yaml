@@ -1,0 +1,15 @@
+schema_version: YAMRAIL_HOLD_REGISTER_V1
+register_id: HOLD-SYN-001
+status: OPEN
+items:
+- hold_id: H-SYN-001
+  subject: STA.0+040 路床高低差
+  state: HOLD
+  evidence_ref: ../02_EVIDENCE/FIELD_RECORD.yaml
+  release_condition: 是正施工後の再測量で±20 mm以内を確認する
+- hold_id: H-SYN-002
+  subject: STA.0+040付近 軟弱箇所の範囲・深さ
+  state: HOLD
+  evidence_ref: ../02_EVIDENCE/FIELD_RECORD.yaml
+  release_condition: 平面範囲と深さを確認し、必要な置換範囲を人間が承認する
+automatic_release_prohibited: true

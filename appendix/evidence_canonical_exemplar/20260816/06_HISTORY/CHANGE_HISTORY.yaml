@@ -1,0 +1,29 @@
+schema_version: YAMRAIL_CHANGE_HISTORY_V1
+history_id: HIST-SYN-001
+entries:
+- sequence: 1
+  state: BASELINE_ESTABLISHED
+  baseline: ../05_CANONICAL/BASELINE_V1.yaml
+  reason: synthetic initial work baseline
+  authority: synthetic example setup
+- sequence: 2
+  state: FIELD_CONDITION_OBSERVED
+  evidence: ../02_EVIDENCE/FIELD_RECORD.yaml
+  reason: STA.0+040 elevation deviation and soft spot observed
+  authority: observation only
+- sequence: 3
+  state: HOLD_RAISED
+  inspection: ../03_INSPECTION/INSPECTION_RESULT.yaml
+  hold_register: ../04_HOLD/HOLD_REGISTER.yaml
+  reason: specified tolerance exceeded and soft spot extent unknown
+  authority: inspection
+- sequence: 4
+  state: CANDIDATE_BASELINE_CREATED
+  candidate: ../05_CANONICAL/BASELINE_V2.yaml
+  reason: localized corrective work and re-survey condition proposed
+  authority: candidate preparation only
+- sequence: 5
+  state: CANONICAL_CHANGE_PENDING
+  pointer: ../05_CANONICAL/CANONICAL_POINTER.yaml
+  reason: Human Gate not yet approved
+  authority: Human Gate required

@@ -1,0 +1,28 @@
+schema_version: YAMRAIL_CANONICAL_BASELINE_V1
+baseline_id: BL-SYN-V2
+status: CANDIDATE_NOT_CANONICAL
+derived_from: BL-SYN-V1
+trigger_evidence: ../02_EVIDENCE/FIELD_RECORD.yaml
+trigger_inspection: ../03_INSPECTION/INSPECTION_RESULT.yaml
+subject: 下層路盤施工前 路床施工基面（局所是正条件追加候補）
+stations:
+- station: STA.0+020
+  formation_elevation_m: 101.25
+  change: none
+- station: STA.0+040
+  formation_elevation_m: 101.12
+  change: localized corrective condition proposed
+  corrective_candidate:
+    undercut_depth_mm: 150
+    replacement_material: approved granular fill, synthetic specification
+    re_survey_required: true
+    acceptance_after_rework: formation level within ±20 mm and soft spot extent closed
+- station: STA.0+060
+  formation_elevation_m: 100.99
+  change: none
+canonicalization_requires: Human Gate APPROVE
+current_canonical: false
+note: 本ファイルは是正後の正本候補であり、AI出力又は作成時点では正本ではない。
+engineering_design_claim: false
+synthetic_value_notice: 150 mm and material wording are placeholders for demonstrating
+  change control only; not field guidance

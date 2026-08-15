@@ -1,0 +1,21 @@
+schema_version: YAMRAIL_INSPECTION_RESULT_V1
+inspection_id: INSP-SYN-001
+inspected_at: '2026-08-16T02:55:00+09:00'
+evidence_ref: ../02_EVIDENCE/FIELD_RECORD.yaml
+baseline_ref: ../05_CANONICAL/BASELINE_V1.yaml
+checks:
+- item: STA.0+020 formation level
+  result: PASS
+  basis: difference +8 mm within ±20 mm
+- item: STA.0+040 formation level
+  result: HOLD
+  basis: difference -35 mm outside ±20 mm
+- item: STA.0+060 formation level
+  result: PASS
+  basis: difference -6 mm within ±20 mm
+- item: soft spot extent
+  result: HOLD
+  basis: extent and depth not confirmed
+overall_status: HOLD
+canonical_change_decision: NOT_AUTHORIZED_HERE
+note: 照査結果は証憑と正本を分離し、未確認事項をHOLDのまま保持する。
