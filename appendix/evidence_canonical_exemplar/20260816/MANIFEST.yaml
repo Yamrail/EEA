@@ -1,0 +1,52 @@
+schema_version: YAMRAIL_EVIDENCE_BUNDLE_MANIFEST_V1
+bundle_id: YR-PUBLIC-EVIDENCE-CANONICAL-EXEMPLAR-20260816-01
+bundle_status: PRIVATE_STAGING_APPROVED_FOR_PUBLICATION
+created_at: '2026-08-16T03:00:00+09:00'
+updated_at: '2026-08-16T03:35:00+09:00'
+root: 03_operations/research/public_evidence_canonical_exemplar/20260816/
+synthetic_only: true
+public_release_authorized: true
+member_count: 11
+members:
+- path: README.md
+  sha256: 62f8f8f26af36a0ae365d6f5872296329ceef618ecf2fa95de64778bc4b0ab8e
+  bytes: 4197
+- path: 01_ORDER/WORK_ORDER.yaml
+  sha256: f805ab9b10ba3bc3ee712e8d3741fd0ce41b7fbbe3e52a89f9ddee88f83bf960
+  bytes: 895
+- path: 02_EVIDENCE/FIELD_RECORD.yaml
+  sha256: 44cd06c056bb0bc92be4ac2df7574d274bf42528d59cc474a78bfb66b9e5dc98
+  bytes: 977
+- path: 02_EVIDENCE/SHA256SUMS.txt
+  sha256: 9b886688b55172f1951bf7b93bd5347290a5542522f040984bb8e58ea54d8e70
+  bytes: 84
+- path: 03_INSPECTION/INSPECTION_RESULT.yaml
+  sha256: ba6051528750928037e11485078a670abafb44b146cc8de988201ee1ec368f5b
+  bytes: 735
+- path: 04_HOLD/HOLD_REGISTER.yaml
+  sha256: 7dbfa623a84b6f79c9f66709102fe7a50fe5e6eeea62958b943b318fc4c46ad1
+  bytes: 568
+- path: 05_CANONICAL/BASELINE_V1.yaml
+  sha256: 6fc7cc55166aaf5bf1ef507f3384842dca2364daeea0c02d2491d9dcfbfe2136
+  bytes: 545
+- path: 05_CANONICAL/BASELINE_V2.yaml
+  sha256: 73777e6527bfa7da17ea5b06770a556e0e3de4af59a1874bf686d604c09fcb94
+  bytes: 1159
+- path: 05_CANONICAL/CANONICAL_POINTER.yaml
+  sha256: 21909cafbf23793d9824297c590bef3eae38b7c3134d6f5c0ad656e51a54b11c
+  bytes: 436
+- path: 06_HISTORY/CHANGE_HISTORY.yaml
+  sha256: 96ea6e8cee17e84cde3b821d4560d277f39646a1692ebeb1952a172789c5cb21
+  bytes: 1032
+- path: HUMAN_GATE.yaml
+  sha256: 6e70054f1cf91718a28de94544b86b364b126c935fbcb549e1d638df73438467
+  bytes: 666
+integrity_rule: 各memberのSHA-256を本manifestで照合する。MANIFEST.yaml自身はGit commitで固定し、自己hashは持たない。
+canonical_resolution: 05_CANONICAL/CANONICAL_POINTER.yaml
+current_canonical: 05_CANONICAL/BASELINE_V1.yaml
+candidate_canonical: 05_CANONICAL/BASELINE_V2.yaml
+unresolved_holds:
+- H-SYN-001
+- H-SYN-002
+- canonical_change Human Gate
+next_action: CODEX_PUBLICATION_WORK_ORDER_ALLOWED
