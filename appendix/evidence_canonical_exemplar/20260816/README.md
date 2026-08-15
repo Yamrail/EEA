@@ -1,4 +1,4 @@
-# YamRail 証憑束＋正本管理 施工例（Private Staging）
+# YamRail 証憑束＋正本管理 施工例（公開済み）
 
 > **日本語正文 / Japanese text is authoritative.**  
 > 本READMEは日本語を正文とし、後半の英語は参考訳です。
@@ -48,9 +48,10 @@
 - 実案件情報は含みません。
 - 個人情報、資格情報、private URL、秘密情報を意図的に含みません。
 - 未公開の特許関連資料・内部研究成果は含みません。
-- 本束は現在 **PRIVATE STAGING** です。
-- public repositoryへの搬出は未承認です。
-- `HUMAN_GATE.yaml` の `public_release.state` は **HOLD** のままです。
+- 本束は現在 **公開済み** です。
+- public repositoryへの搬出は承認済みで、搬出済みです。
+- `HUMAN_GATE.yaml` の `public_release.state` は **APPROVE** です。
+- `HUMAN_GATE.yaml` の `canonical_change.state` は **HOLD** のままです。
 
 ---
 
@@ -101,6 +102,7 @@ Accordingly:
 - No real project data is included.
 - No personal data, credentials, private URLs, or secrets are intentionally included.
 - No unpublished patent-sensitive material or internal research output is included.
-- This bundle remains in **PRIVATE STAGING**.
-- Transfer to a public repository has not been authorized.
-- `HUMAN_GATE.yaml` keeps `public_release.state` at **HOLD**.
+- This bundle is **PUBLICLY RELEASED**.
+- Transfer to the public repository was approved and completed.
+- `HUMAN_GATE.yaml` sets `public_release.state` to **APPROVE**.
+- `HUMAN_GATE.yaml` keeps `canonical_change.state` at **HOLD**.
