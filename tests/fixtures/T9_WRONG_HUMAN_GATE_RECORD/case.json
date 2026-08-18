@@ -1,0 +1,8 @@
+{
+  "case_id": "T9_WRONG_HUMAN_GATE_RECORD",
+  "expected_decision": "HOLD",
+  "human_gate": {
+    "record_id": "HG-MISSING-001"
+  }
+}
+

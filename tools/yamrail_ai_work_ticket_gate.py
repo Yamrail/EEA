@@ -152,7 +152,10 @@ def evaluate_case(case: dict[str, Any], root: Path) -> dict[str, Any]:
     blocked: list[str] = []
 
     source_refs = case.get("source_refs", [])
-    source_pass, source_results, source_holds = _all_refs_reachable(root, source_refs)
+    if source_refs:
+        source_pass, source_results, source_holds = _all_refs_reachable(root, source_refs)
+    else:
+        source_pass, source_results, source_holds = False, [], ["SOURCE_REFS_REQUIRED"]
     holds.extend(source_holds)
 
     allowed_repository = authority.get("repository")
@@ -175,22 +178,51 @@ def evaluate_case(case: dict[str, Any], root: Path) -> dict[str, Any]:
     gate_ref = human_gate.get("path", "")
     gate_path = _resolve(root, gate_ref)
     gate_reachable = gate_path is not None and gate_path.is_file()
+    gate_content = _read_text(root, gate_ref) if gate_reachable else None
     approval_target = human_gate.get("approval_target", {})
     target_fields = ("head", "diff_sha256", "artifact_hash")
-    freshness_matches = all(approval_target.get(field) == target.get(field) for field in target_fields)
-    approval_fresh = human_gate.get("decision") == "APPROVE" and freshness_matches
+    bound_fields = [
+        field for field in target_fields
+        if approval_target.get(field) is not None and str(approval_target.get(field)).strip()
+    ]
+    freshness_matches = bool(bound_fields) and all(
+        target.get(field) is not None
+        and str(target.get(field)).strip()
+        and approval_target.get(field) == target.get(field)
+        for field in bound_fields
+    )
+    human_gate_record_id = human_gate.get("record_id")
+    human_gate_record_reachable = bool(human_gate_record_id) and bool(
+        gate_content is not None and str(human_gate_record_id) in gate_content
+    )
+    human_gate_pass = (
+        gate_reachable
+        and human_gate_record_reachable
+        and human_gate.get("decision") == "APPROVE"
+        and freshness_matches
+    )
+    approval_fresh = human_gate_pass
     if not gate_reachable:
         holds.append(f"HUMAN_GATE_UNREACHABLE:{gate_ref}")
     elif human_gate.get("decision") != "APPROVE":
         holds.append("HUMAN_GATE_NOT_APPROVED")
+    elif not human_gate_record_reachable:
+        holds.append(f"HUMAN_GATE_RECORD_UNREACHABLE:{human_gate_record_id}")
+    elif not bound_fields:
+        holds.append("HUMAN_GATE_UNBOUND")
     elif not freshness_matches:
         holds.append("HUMAN_GATE_STALE")
 
     manifest_path = str(case.get("manifest_path", ""))
+    artifact_refs = case.get("artifact_refs", [])
+    if not manifest_path:
+        holds.append("MANIFEST_UNSPECIFIED")
+    if not artifact_refs:
+        holds.append("ARTIFACT_REFS_REQUIRED")
     manifest_entries = _parse_manifest_members(root, manifest_path)
     manifest_by_path = {str(entry.get("path")): entry for entry in manifest_entries}
     artifact_results: list[dict[str, Any]] = []
-    for artifact in case.get("artifact_refs", []):
+    for artifact in artifact_refs:
         relative = str(artifact.get("path", ""))
         path = _resolve(root, relative)
         exists = path is not None and path.is_file()
@@ -213,6 +245,8 @@ def evaluate_case(case: dict[str, Any], root: Path) -> dict[str, Any]:
         if not passed:
             holds.append(f"ARTIFACT_HASH_MISMATCH:{relative}")
     artifact_pass = bool(artifact_results) and all(item["status"] == "PASS" for item in artifact_results)
+    if not artifact_pass:
+        holds.append("ARTIFACT_INTEGRITY_FAILED")
 
     postcondition = case.get("postcondition", {})
     required_postcondition_fields = ("precondition", "operation_scope", "postcondition", "artifact_hash_state")
@@ -249,12 +283,29 @@ def evaluate_case(case: dict[str, Any], root: Path) -> dict[str, Any]:
         if not passed:
             holds.append(f"EVIDENCE_NOT_REACHABLE:{record_id}:{relative}")
 
+    precondition_results = {
+        "source_reachability": _ok(source_pass, "all required source refs are reachable and exact"),
+        "authority_boundary": _ok(authority_pass, "repository, branch, path, and operation remain in explicit scope"),
+        "human_gate": _ok(human_gate_pass, "Human Gate ref, record, approval, and target binding are valid"),
+        "artifact_integrity": _ok(artifact_pass, "manifest SHA-256 and byte counts match"),
+    }
+    required_precondition_pass = all(
+        item["status"] == "PASS" for item in precondition_results.values()
+    )
+    if not required_precondition_pass:
+        holds.append("REQUIRED_PRECONDITION_FAILED")
+
     decision = "BLOCKED" if blocked else "HOLD" if holds else "PASS"
     if decision not in DECISIONS:
         decision = "UNKNOWN"
 
+    required_condition_pass = (
+        required_precondition_pass and postcondition_pass and history_pass and reachability_pass
+    )
     metric_totals = {
-        "unsupported_acceptance_count/rate": _metric(1 if decision != "PASS" else 0, 1),
+        "unsupported_acceptance_count/rate": _metric(
+            1 if decision == "PASS" and not required_condition_pass else 0, 1
+        ),
         "evidence_reachability_count/rate": _metric(sum(item["status"] == "PASS" for item in reachability_results), len(reachability_results)),
         "unauthorized_action_block_count/rate": _metric(1 if blocked else 0, 1),
         "stale_approval_detection_count/rate": _metric(1 if human_gate.get("decision") == "APPROVE" and not freshness_matches else 0, 1),
@@ -278,16 +329,13 @@ def evaluate_case(case: dict[str, Any], root: Path) -> dict[str, Any]:
             "paths": {"allowed": allowed_paths, "changed": path_results, "status": "PASS" if paths_ok else "BLOCKED"},
         },
         "human_gate_ref": gate_ref,
+        "human_gate_record_id": human_gate_record_id,
+        "human_gate_record_reachable": human_gate_record_reachable,
         "approval_target": approval_target,
         "approval_freshness": "FRESH" if approval_fresh else "STALE" if gate_reachable and human_gate.get("decision") == "APPROVE" else "UNKNOWN",
         "artifact_hash_results": artifact_results,
         "changed_paths": changed_paths,
-        "precondition_results": {
-            "source_reachability": _ok(source_pass, "all required source refs are reachable and exact"),
-            "authority_boundary": _ok(authority_pass, "repository, branch, path, and operation remain in explicit scope"),
-            "human_gate": _ok(gate_reachable and human_gate.get("decision") == "APPROVE", "Human Gate ref is reachable and approved"),
-            "artifact_integrity": _ok(artifact_pass, "manifest SHA-256 and byte counts match"),
-        },
+        "precondition_results": precondition_results,
         "postcondition_results": {
             "complete": postcondition_complete,
             "verified": postcondition.get("verified") is True,
@@ -341,7 +389,11 @@ def run_fixtures(project_root: Path, receipt: Path | None) -> list[dict[str, Any
     fixture_root = project_root / "tests" / "fixtures"
     base_case = load_case(fixture_root / "base_case.json")
     results: list[dict[str, Any]] = []
-    for case_path in sorted(fixture_root.glob("T*/case.json")):
+    fixture_paths = sorted(
+        fixture_root.glob("T*/case.json"),
+        key=lambda path: (int(re.search(r"T(\d+)", path.parent.name).group(1)), str(path)),
+    )
+    for case_path in fixture_paths:
         case = _deep_merge(base_case, load_case(case_path))
         workspace = fixture_root / str(case["workspace"])
         result = evaluate_case(case, workspace)
@@ -349,8 +401,8 @@ def run_fixtures(project_root: Path, receipt: Path | None) -> list[dict[str, Any
         if result["decision"] != expected:
             raise AssertionError(f"{case['case_id']}: expected {expected}, got {result['decision']}")
         results.append(result)
-    if len(results) != 6:
-        raise AssertionError(f"expected 6 fixtures, found {len(results)}")
+    if len(results) != 12:
+        raise AssertionError(f"expected 12 fixtures, found {len(results)}")
     if receipt is not None:
         pass_result = next(item for item in results if item["case_id"] == "T1_PASS")
         write_receipt(pass_result, receipt)

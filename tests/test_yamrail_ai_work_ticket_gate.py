@@ -14,7 +14,7 @@ class YamrailAiWorkTicketGateTests(unittest.TestCase):
     def test_six_required_fixture_decisions(self):
         results = run_fixtures(PROJECT_ROOT, None)
         self.assertEqual(
-            [(result["case_id"], result["decision"]) for result in results],
+            [(result["case_id"], result["decision"]) for result in results[:6]],
             [
                 ("T1_PASS", "PASS"),
                 ("T2_HOLD", "HOLD"),
@@ -57,6 +57,48 @@ class YamrailAiWorkTicketGateTests(unittest.TestCase):
             self.assertEqual(receipt["decision"], "PASS")
             self.assertEqual(receipt["approval_freshness"], "FRESH")
             self.assertEqual(receipt["holds"], [])
+
+    def test_rework_negative_fixtures_hold_for_missing_bindings_and_artifacts(self):
+        results = {result["case_id"]: result for result in run_fixtures(PROJECT_ROOT, None)}
+        for case_id in (
+            "T7_EMPTY_SOURCE_REFS",
+            "T8_UNBOUND_HUMAN_GATE",
+            "T9_WRONG_HUMAN_GATE_RECORD",
+            "T10_EMPTY_ARTIFACT_REFS",
+            "T11_FAILED_ARTIFACT_PRECONDITION",
+            "T12_MANIFEST_UNSPECIFIED",
+        ):
+            self.assertEqual(results[case_id]["decision"], "HOLD")
+        self.assertIn("SOURCE_REFS_REQUIRED", results["T7_EMPTY_SOURCE_REFS"]["holds"])
+        self.assertIn("HUMAN_GATE_UNBOUND", results["T8_UNBOUND_HUMAN_GATE"]["holds"])
+        self.assertIn(
+            "HUMAN_GATE_RECORD_UNREACHABLE:HG-MISSING-001",
+            results["T9_WRONG_HUMAN_GATE_RECORD"]["holds"],
+        )
+        self.assertIn("ARTIFACT_REFS_REQUIRED", results["T10_EMPTY_ARTIFACT_REFS"]["holds"])
+        self.assertIn("ARTIFACT_INTEGRITY_FAILED", results["T10_EMPTY_ARTIFACT_REFS"]["holds"])
+        self.assertEqual(results["T11_FAILED_ARTIFACT_PRECONDITION"]["precondition_results"]["artifact_integrity"]["status"], "FAIL")
+        self.assertIn("MANIFEST_UNSPECIFIED", results["T12_MANIFEST_UNSPECIFIED"]["holds"])
+
+    def test_pass_requires_all_required_preconditions(self):
+        results = {result["case_id"]: result for result in run_fixtures(PROJECT_ROOT, None)}
+        for case_id in ("T1_PASS", "T6_PASS_AFTER_CORRECTION"):
+            self.assertEqual(results[case_id]["decision"], "PASS")
+            self.assertTrue(
+                all(
+                    item["status"] == "PASS"
+                    for item in results[case_id]["precondition_results"].values()
+                )
+            )
+
+    def test_unsupported_acceptance_does_not_count_holds_or_blocked(self):
+        results = run_fixtures(PROJECT_ROOT, None)
+        self.assertTrue(
+            all(
+                result["metrics"]["unsupported_acceptance_count/rate"]["count"] == 0
+                for result in results
+            )
+        )
 
     def test_manifest_member_paths_are_relative_to_manifest_directory(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -1,0 +1,6 @@
+{
+  "case_id": "T11_FAILED_ARTIFACT_PRECONDITION",
+  "expected_decision": "HOLD",
+  "manifest_path": "MANIFEST-MISMATCH.yaml"
+}
+
