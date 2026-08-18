@@ -1,0 +1,8 @@
+work_order_id: SYNTHETIC-WORK-ORDER-001
+record_id: WO-SYN-001
+status: ISSUED
+repository: Yamrail/EEA
+branch: codex/luna-ai-work-ticket-gate-poc-20260818-01
+operation: validation
+scope: repository-local fixture validation and receipt generation
+

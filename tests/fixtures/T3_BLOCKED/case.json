@@ -1,0 +1,6 @@
+{
+  "case_id": "T3_BLOCKED",
+  "expected_decision": "BLOCKED",
+  "changed_paths": ["private/unapproved.txt"]
+}
+

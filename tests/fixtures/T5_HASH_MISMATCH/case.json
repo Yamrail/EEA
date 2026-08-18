@@ -1,0 +1,6 @@
+{
+  "case_id": "T5_HASH_MISMATCH",
+  "expected_decision": "HOLD",
+  "manifest_path": "MANIFEST-MISMATCH.yaml"
+}
+

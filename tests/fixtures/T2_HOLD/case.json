@@ -1,0 +1,10 @@
+{
+  "case_id": "T2_HOLD",
+  "expected_decision": "HOLD",
+  "source_refs": [
+    {"kind": "source_body", "record_id": "WO-SYN-001", "path": "WORK_ORDER.yaml"},
+    {"kind": "required_evidence", "record_id": "EV-MISSING-001", "path": "MISSING_REQUIRED_EVIDENCE.yaml"},
+    {"kind": "canonical", "record_id": "CAN-SYN-001", "path": "CANONICAL.yaml"}
+  ]
+}
+

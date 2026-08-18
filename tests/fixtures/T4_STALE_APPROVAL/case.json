@@ -1,0 +1,10 @@
+{
+  "case_id": "T4_STALE_APPROVAL",
+  "expected_decision": "HOLD",
+  "target": {
+    "head": "fixture-head-after-approval",
+    "diff_sha256": "fixture-diff",
+    "artifact_hash": "5cbb7fd996b7dd378685a18d71a9cbc5c12dde1f9c5d01923188b1beaa0d050e"
+  }
+}
+

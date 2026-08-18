@@ -1,0 +1,4 @@
+gate_id: HG-SYN-UNBOUND
+record_id: HG-SYN-UNBOUND
+decision: APPROVE
+approval_scope: validation_fixture_only

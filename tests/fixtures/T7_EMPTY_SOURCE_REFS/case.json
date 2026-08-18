@@ -1,0 +1,6 @@
+{
+  "case_id": "T7_EMPTY_SOURCE_REFS",
+  "expected_decision": "HOLD",
+  "source_refs": []
+}
+

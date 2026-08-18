@@ -1,0 +1,8 @@
+{
+  "case_id": "T8_UNBOUND_HUMAN_GATE",
+  "expected_decision": "HOLD",
+  "human_gate": {
+    "path": "HUMAN_GATE-UNBOUND.yaml",
+    "record_id": "HG-SYN-UNBOUND"
+  }
+}

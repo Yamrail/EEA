@@ -1,0 +1,6 @@
+{
+  "case_id": "T10_EMPTY_ARTIFACT_REFS",
+  "expected_decision": "HOLD",
+  "artifact_refs": []
+}
+
