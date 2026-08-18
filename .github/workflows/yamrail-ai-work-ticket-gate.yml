@@ -1,0 +1,40 @@
+name: yamrail-ai-work-ticket-gate
+
+on:
+  pull_request:
+  workflow_dispatch:
+  push:
+    branches-ignore:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  yamrail-ai-work-ticket-gate:
+    name: yamrail-ai-work-ticket-gate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the candidate branch
+        uses: actions/checkout@v4
+
+      - name: Run repository-local fixture tests
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v
+
+      - name: Validate published evidence canonical exemplar
+        run: python3 tools/yamrail_ai_work_ticket_gate.py --validate-exemplar --project-root .
+
+      - name: Generate machine-readable acceptance receipt
+        run: |
+          python3 tools/yamrail_ai_work_ticket_gate.py \
+            --run-fixtures \
+            --project-root . \
+            --receipt yamrail-ai-work-ticket-gate.receipt.json
+
+      - name: Preserve acceptance receipt as a workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: yamrail-ai-work-ticket-gate-receipt
+          path: yamrail-ai-work-ticket-gate.receipt.json
+          if-no-files-found: error
+

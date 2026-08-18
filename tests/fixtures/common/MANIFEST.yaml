@@ -1,0 +1,6 @@
+schema_version: SYNTHETIC_MANIFEST_V1
+members:
+- path: artifact.txt
+  sha256: 5cbb7fd996b7dd378685a18d71a9cbc5c12dde1f9c5d01923188b1beaa0d050e
+  bytes: 58
+

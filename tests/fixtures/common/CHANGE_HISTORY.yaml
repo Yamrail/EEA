@@ -1,0 +1,7 @@
+history_id: HIST-SYN-001
+states:
+- HOLD
+- CORRECTIVE_TRANSITION
+- PASS
+note: prior HOLD remains in the history after correction
+

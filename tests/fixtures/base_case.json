@@ -1,0 +1,60 @@
+{
+  "case_id": "T1_PASS",
+  "expected_decision": "PASS",
+  "workspace": "common",
+  "repository": "Yamrail/EEA",
+  "branch": "codex/luna-ai-work-ticket-gate-poc-20260818-01",
+  "operation": "validation",
+  "work_order": {
+    "work_order_id": "INLINE_CANONICAL_WORK_ORDER_V1",
+    "authority": {
+      "repository": "Yamrail/EEA",
+      "branch": "codex/luna-ai-work-ticket-gate-poc-20260818-01",
+      "paths": ["tools/**", "tests/**", ".github/**", "docs/**"],
+      "operations": ["validation", "receipt_generation"]
+    }
+  },
+  "source_refs": [
+    {"kind": "source_body", "record_id": "WO-SYN-001", "path": "WORK_ORDER.yaml"},
+    {"kind": "evidence", "record_id": "EV-SYN-001", "path": "EVIDENCE.yaml"},
+    {"kind": "canonical", "record_id": "CAN-SYN-001", "path": "CANONICAL.yaml"}
+  ],
+  "manifest_path": "MANIFEST.yaml",
+  "human_gate": {
+    "path": "HUMAN_GATE.yaml",
+    "record_id": "HG-SYN-001",
+    "decision": "APPROVE",
+    "approval_target": {
+      "head": "fixture-head",
+      "diff_sha256": "fixture-diff",
+      "artifact_hash": "5cbb7fd996b7dd378685a18d71a9cbc5c12dde1f9c5d01923188b1beaa0d050e"
+    }
+  },
+  "target": {
+    "head": "fixture-head",
+    "diff_sha256": "fixture-diff",
+    "artifact_hash": "5cbb7fd996b7dd378685a18d71a9cbc5c12dde1f9c5d01923188b1beaa0d050e"
+  },
+  "changed_paths": [
+    "tools/yamrail_ai_work_ticket_gate.py",
+    "tests/test_yamrail_ai_work_ticket_gate.py",
+    ".github/workflows/yamrail-ai-work-ticket-gate.yml",
+    "docs/yamrail_ai_work_ticket_gate_poc.md"
+  ],
+  "artifact_refs": [{"path": "artifact.txt"}],
+  "determinations": [
+    {"statement": "synthetic evidence is current", "record_id": "EV-SYN-001", "path": "EVIDENCE.yaml"},
+    {"statement": "canonical baseline is identified", "record_id": "CAN-SYN-001", "path": "CANONICAL.yaml"}
+  ],
+  "history_refs": [
+    {"path": "CHANGE_HISTORY.yaml", "record_id": "HIST-SYN-001", "required_states": ["HOLD", "CORRECTIVE_TRANSITION", "PASS"]}
+  ],
+  "postcondition": {
+    "precondition": "all required fixture refs are reachable",
+    "operation_scope": "validation",
+    "postcondition": "machine-readable result is produced without external publication",
+    "artifact_hash_state": "MATCH",
+    "verified": true
+  }
+}
+

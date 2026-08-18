@@ -1,0 +1,5 @@
+evidence_id: EV-SYN-001
+evidence_uri: fixture://evidence/EV-SYN-001
+status: CURRENT
+statement: synthetic evidence is reachable by exact path and identifier
+

@@ -1,0 +1,2 @@
+synthetic artifact for deterministic SHA-256 verification
+
