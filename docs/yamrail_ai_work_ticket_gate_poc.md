@@ -26,4 +26,4 @@ This PoC does not claim superiority over GitHub, OPA, SLSA, ITSM, or any certifi
 
 The workflow generates `yamrail-ai-work-ticket-gate.receipt.json` and retains it as a workflow artifact. All fields other than `generated_at` are derived from the fixture and evaluation target, so repeated evaluations can be compared without relying on a timestamp.
 
-
+The Human Gate `approval_target` is read from the referenced Human Gate evidence file itself. Case JSON is limited to locating the gate record and target state; case-side approval bindings are not trusted.

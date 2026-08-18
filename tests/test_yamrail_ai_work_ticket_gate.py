@@ -4,7 +4,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from tools.yamrail_ai_work_ticket_gate import _parse_manifest_members, run_fixtures, write_receipt
+from tools.yamrail_ai_work_ticket_gate import evaluate_case, _parse_manifest_members, load_case, run_fixtures, write_receipt
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -91,6 +91,25 @@ class YamrailAiWorkTicketGateTests(unittest.TestCase):
                 )
             )
 
+    def test_human_gate_binding_comes_from_evidence_file(self):
+        base_case = load_case(PROJECT_ROOT / "tests" / "fixtures" / "base_case.json")
+        base_case["human_gate"]["approval_target"] = {
+            "head": "case-side-forbidden-value",
+            "diff_sha256": "case-side-forbidden-value",
+            "artifact_hash": "case-side-forbidden-value",
+        }
+        result = evaluate_case(base_case, PROJECT_ROOT / "tests" / "fixtures" / "common")
+        self.assertEqual(result["decision"], "PASS")
+        self.assertEqual(result["approval_target_source"], "HUMAN_GATE.yaml")
+        self.assertEqual(result["approval_target"]["head"], "fixture-head")
+
+        stale = next(
+            item for item in run_fixtures(PROJECT_ROOT, None) if item["case_id"] == "T4_STALE_APPROVAL"
+        )
+        self.assertEqual(stale["decision"], "HOLD")
+        self.assertEqual(stale["approval_target"]["head"], "fixture-head")
+        self.assertIn("HUMAN_GATE_STALE", stale["holds"])
+
     def test_unsupported_acceptance_does_not_count_holds_or_blocked(self):
         results = run_fixtures(PROJECT_ROOT, None)
         self.assertTrue(
@@ -119,4 +138,3 @@ class YamrailAiWorkTicketGateTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

@@ -2,11 +2,7 @@
   "case_id": "T8_UNBOUND_HUMAN_GATE",
   "expected_decision": "HOLD",
   "human_gate": {
-    "approval_target": {
-      "head": "",
-      "diff_sha256": "",
-      "artifact_hash": ""
-    }
+    "path": "HUMAN_GATE-UNBOUND.yaml",
+    "record_id": "HG-SYN-UNBOUND"
   }
 }
-

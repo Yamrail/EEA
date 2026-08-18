@@ -17,3 +17,4 @@ The fixtures are repository-local synthetic tests only:
 
 The fixture input is separate from the published canonical exemplar. It does not rewrite or replace any exemplar file.
 
+Human Gate binding values are stored in `common/HUMAN_GATE.yaml` (or the named fixture Human Gate file). Case JSON may identify the Human Gate path and record, but its `approval_target` is never an approval source.

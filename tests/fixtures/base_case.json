@@ -23,12 +23,7 @@
   "human_gate": {
     "path": "HUMAN_GATE.yaml",
     "record_id": "HG-SYN-001",
-    "decision": "APPROVE",
-    "approval_target": {
-      "head": "fixture-head",
-      "diff_sha256": "fixture-diff",
-      "artifact_hash": "5cbb7fd996b7dd378685a18d71a9cbc5c12dde1f9c5d01923188b1beaa0d050e"
-    }
+    "decision": "APPROVE"
   },
   "target": {
     "head": "fixture-head",
@@ -57,4 +52,3 @@
     "verified": true
   }
 }
-

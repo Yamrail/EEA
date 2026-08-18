@@ -58,6 +58,36 @@ def _read_text(root: Path, relative: str) -> str | None:
         return None
 
 
+def _parse_scalar(text: str | None, key: str) -> str | None:
+    if text is None:
+        return None
+    match = re.search(rf"^{re.escape(key)}:\s*(.+?)\s*$", text, re.MULTILINE)
+    if not match:
+        return None
+    return match.group(1).strip().strip("'\"")
+
+
+def _parse_human_gate_approval_target(text: str | None) -> dict[str, str]:
+    """Read the binding from the Human Gate evidence, never from case input."""
+
+    if text is None:
+        return {}
+    target: dict[str, str] = {}
+    in_target = False
+    for line in text.splitlines():
+        if line.strip() == "approval_target:":
+            in_target = True
+            continue
+        if in_target and re.match(r"^\S", line):
+            break
+        if not in_target:
+            continue
+        match = re.match(r"^\s+(head|diff_sha256|artifact_hash):\s*(.+?)\s*$", line)
+        if match:
+            target[match.group(1)] = match.group(2).strip().strip("'\"")
+    return target
+
+
 def _parse_manifest_members(root: Path, manifest_path: str) -> list[dict[str, Any]]:
     """Parse the small `members` subset used by the canonical YAML manifest.
 
@@ -179,7 +209,8 @@ def evaluate_case(case: dict[str, Any], root: Path) -> dict[str, Any]:
     gate_path = _resolve(root, gate_ref)
     gate_reachable = gate_path is not None and gate_path.is_file()
     gate_content = _read_text(root, gate_ref) if gate_reachable else None
-    approval_target = human_gate.get("approval_target", {})
+    gate_decision = _parse_scalar(gate_content, "decision")
+    approval_target = _parse_human_gate_approval_target(gate_content)
     target_fields = ("head", "diff_sha256", "artifact_hash")
     bound_fields = [
         field for field in target_fields
@@ -198,13 +229,13 @@ def evaluate_case(case: dict[str, Any], root: Path) -> dict[str, Any]:
     human_gate_pass = (
         gate_reachable
         and human_gate_record_reachable
-        and human_gate.get("decision") == "APPROVE"
+        and gate_decision == "APPROVE"
         and freshness_matches
     )
     approval_fresh = human_gate_pass
     if not gate_reachable:
         holds.append(f"HUMAN_GATE_UNREACHABLE:{gate_ref}")
-    elif human_gate.get("decision") != "APPROVE":
+    elif gate_decision != "APPROVE":
         holds.append("HUMAN_GATE_NOT_APPROVED")
     elif not human_gate_record_reachable:
         holds.append(f"HUMAN_GATE_RECORD_UNREACHABLE:{human_gate_record_id}")
@@ -308,7 +339,7 @@ def evaluate_case(case: dict[str, Any], root: Path) -> dict[str, Any]:
         ),
         "evidence_reachability_count/rate": _metric(sum(item["status"] == "PASS" for item in reachability_results), len(reachability_results)),
         "unauthorized_action_block_count/rate": _metric(1 if blocked else 0, 1),
-        "stale_approval_detection_count/rate": _metric(1 if human_gate.get("decision") == "APPROVE" and not freshness_matches else 0, 1),
+        "stale_approval_detection_count/rate": _metric(1 if gate_decision == "APPROVE" and not freshness_matches else 0, 1),
         "postcondition_mismatch_detection_count/rate": _metric(1 if not postcondition_pass else 0, 1),
         "false_hold_count/rate": None,
         "history_preservation_count/rate": _metric(sum(item["status"] == "PASS" for item in history_results), len(history_results)),
@@ -331,8 +362,9 @@ def evaluate_case(case: dict[str, Any], root: Path) -> dict[str, Any]:
         "human_gate_ref": gate_ref,
         "human_gate_record_id": human_gate_record_id,
         "human_gate_record_reachable": human_gate_record_reachable,
+        "approval_target_source": gate_ref,
         "approval_target": approval_target,
-        "approval_freshness": "FRESH" if approval_fresh else "STALE" if gate_reachable and human_gate.get("decision") == "APPROVE" else "UNKNOWN",
+        "approval_freshness": "FRESH" if approval_fresh else "STALE" if gate_reachable and gate_decision == "APPROVE" else "UNKNOWN",
         "artifact_hash_results": artifact_results,
         "changed_paths": changed_paths,
         "precondition_results": precondition_results,
@@ -484,4 +516,3 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
