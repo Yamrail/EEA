@@ -478,7 +478,7 @@ def validate_published_exemplar(project_root: Path) -> dict[str, Any]:
         resolved = _resolve(root, candidate)
         reachability[candidate] = resolved is not None and resolved.is_file()
     human_gate_text = _read_text(root, str(CANONICAL_EXEMPLAR_ROOT / "HUMAN_GATE.yaml")) or ""
-    canonical_change_hold = bool(re.search(r"canonical_change:\s*\n\s+state:\s+HOLD", human_gate_text))
+    canonical_change_hold = bool(re.search(r"canonical_change:\s*\r?\n\s+state:\s+HOLD", human_gate_text))
     passed = bool(members) and all(item["status"] == "PASS" for item in member_results) and all(reachability.values()) and canonical_change_hold
     return {
         "canonical_exemplar_root": str(CANONICAL_EXEMPLAR_ROOT).replace("\\", "/"),
