@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-19 — jXiv preprint publication
+
+- 「証拠・境界制約下におけるLLM挙動」をjXivでプレプリント公開（DOI: https://doi.org/10.51094/jxiv.6109）
+- 「φLLM / AI Worker 技術報告書」をjXivでプレプリント公開（DOI: https://doi.org/10.51094/jxiv.6112）
+- 書誌情報の参照先として `PUBLICATIONS.md` を追加
+
 ## Unreleased — 2026-07-24 JST
 
 - 憲法層文書に、不完全性、継続改訂および毎月19日の定期点検を追加
