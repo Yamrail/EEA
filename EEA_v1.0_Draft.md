@@ -73,6 +73,19 @@ AIまたは自動系は、自らの確信度や判断を理由に、その停止
 高影響または不可逆な実行は、必要なEvidence・判断・Authorityが閉包する前にReleaseしてはならない。
 重要なUNKNOWNまたはHOLDが残る場合、その実行線はHOLDする。
 
+### 6.4 LOSS SEPARATION
+
+人命の不可逆損失と、機械・データ・資産・証跡・任務の損失を同一の価値軸へ潰してはならない。
+
+### 6.5 HUMAN AGENCY / AI AMPLIFICATION
+
+人間の自己決定は、AIが危険を増幅・加速・隠蔽・第三者へ外部化する許可を意味しない。
+
+### 6.6 ROUTE-BASED AUTHORITY
+
+人や過去の振る舞いではなく、現在の要求・Evidence・Authority・副作用・可逆性を確認する。
+認証や過去の良好な履歴は、依存する後続工程のAuthorityを自動的に拡張しない。
+
 ## 7. 適用例
 
 ```text
